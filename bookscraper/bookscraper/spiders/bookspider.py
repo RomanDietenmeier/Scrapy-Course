@@ -1,5 +1,7 @@
 import scrapy
 
+from ..items import BookscraperItem
+
 
 class BookspiderSpider(scrapy.Spider):
     name = "bookspider"
@@ -15,10 +17,12 @@ class BookspiderSpider(scrapy.Spider):
 
             yield scrapy.Request(absolute_book_link, callback=self.parse_book_page)
 
-            yield {
-                "url": absolute_book_link,
-                "price": book.css(".product_price .price_color::text").get(),
-            }
+            yield BookscraperItem(
+                {
+                    "url": absolute_book_link,
+                    "price": book.css(".product_price .price_color::text").get(),
+                }
+            )
 
         next_page = response.css("li.next a::attr(href)").get()
         if next_page is not None:
@@ -28,13 +32,15 @@ class BookspiderSpider(scrapy.Spider):
     def parse_book_page(self, response):
         book = response.css("article.product_page")
         table_rows = book.css("table tr")
-        yield {
-            "url": response.url,
-            "name": book.css("div.product_main h1::text").get(),
-            "category": response.xpath("//li[3]/a/text()").get(),
-            "description": book.css("#product_description")
-            .xpath(".//following-sibling::p/text()")
-            .get(),
-            "product type": table_rows[1].css("td::text").get(),
-            "star rating": book.css(".star-rating ::attr(class)").get(),
-        }
+        yield BookscraperItem(
+            {
+                "url": response.url,
+                "name": book.css("div.product_main h1::text").get(),
+                "category": response.xpath("//li[3]/a/text()").get(),
+                "description": book.css("#product_description")
+                .xpath(".//following-sibling::p/text()")
+                .get(),
+                "product_type": table_rows[1].css("td::text").get(),
+                "star_rating": book.css(".star-rating ::attr(class)").get(),
+            }
+        )
