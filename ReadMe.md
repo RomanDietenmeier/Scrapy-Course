@@ -32,3 +32,9 @@
 - exit
 - add yield response.follow(next_page_url, callback=self.parse) in spider
 - scrapy crawl bookspider -> now we scrape 50 pages
+- scrapy shell
+- fetch("https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html")
+- get output into files:
+- csv is bugged as I have not always the same keys in my spider yields!
+- scrapy crawl bookspider -o out.json
+- scrapy crawl bookspider -o out.csv
