@@ -3,7 +3,7 @@
 ## https://youtu.be/mBoX_JCKZTE?feature=shared
 
 - python -m venv venv
-- .\venv\Scripts\Activate.ps1
+- ".\venv\Scripts\Activate.ps1" or "source venv/bin/activate"
 - pip install scrapy
 - scrapy startproject bookscraper
 - cd .\bookscraper\
