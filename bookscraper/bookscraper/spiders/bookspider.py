@@ -9,6 +9,29 @@ class BookspiderSpider(scrapy.Spider):
     start_urls = ["https://books.toscrape.com"]
     bookCount = 0
 
+    custom_settings = {
+        "FEEDS": {
+            "books.json": {
+                "format": "json",
+                "encoding": "utf8",
+                "store_empty": True,
+                "item_export_kwargs": {
+                    "export_empty_fields": True,
+                },
+                "overwrite": True,
+            },
+            "books.csv": {
+                "format": "csv",
+                "encoding": "utf8",
+                "store_empty": True,
+                "item_export_kwargs": {
+                    "export_empty_fields": True,
+                },
+                "overwrite": True,
+            },
+        }
+    }
+
     def parse(self, response):
         books = response.css("article.product_pod")
         for book in books:
